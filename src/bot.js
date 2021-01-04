@@ -3,6 +3,7 @@ require('dotenv').config();
 const { Client, DiscordAPIError, MessageReaction, RichPresenceAssets } = require('discord.js');
 const client = new Client();
 const PREFIX = "/";
+var currentVote =  new Array();
 async function vote(addRole, user, member, role, author) 
 {
     const emojis = ['👍', '👎'];
@@ -15,7 +16,7 @@ async function vote(addRole, user, member, role, author)
         const filter = (reaction, user) => {
             return ['👍', '👎'].includes(reaction.emoji.name);
             };
-        const collected = await voteMessage.awaitReactions(filter, { time:5000 }).catch(console.error); //86400000
+        const collected = await voteMessage.awaitReactions(filter, { time:86400000 }).catch(console.error); //86400000
         console.log(collected);
         reactionNames = collected.map(s => reactionNames = s._emoji.name);
         reactionCount = collected.map(s => reactionCount = s.count);
@@ -57,7 +58,7 @@ async function vote(addRole, user, member, role, author)
         const filter = (reaction, user) => {
             return ['👍', '👎'].includes(reaction.emoji.name);
             };
-        const collected = await voteMessage.awaitReactions(filter, { time:5000 }).catch(console.error);
+        const collected = await voteMessage.awaitReactions(filter, { time:86400000 }).catch(console.error);
         console.log(collected);
         reactionNames = collected.map(s => reactionNames = s._emoji.name);
         reactionCount = collected.map(s => reactionCount = s.count);
@@ -91,7 +92,8 @@ async function vote(addRole, user, member, role, author)
             }
         }
     }
-
+    currentVote.indexOf(member.id).remove();
+    console.log(currentVote);
 }
 client.on('message', async message => {
     if (message.author.bot) return;
@@ -131,7 +133,16 @@ client.on('message', async message => {
                                     return message.reply('у указанного пользователя уже есть роль Уважаемый');
                                 }
                                 message.delete();
-                                vote(true, args[2], member, role, message.author);
+                                if (currentVote.indexOf(member.id) === -1)
+                                {
+                                    currentVote.push(member.id);
+                                    vote(true, args[2], member, role, message.author.username);
+                                }
+                                else
+                                {
+                                    const channel = client.channels.cache.find(channel => channel.name === "decvotes");
+                                    channel.send("Голосование за " + args[2] + " уже идет!");
+                                }
                             }
                             else
                             {
@@ -140,7 +151,18 @@ client.on('message', async message => {
                                     return message.reply('у указанного пользователя и так нет роли Уважаемый');
                                 }
                                 message.delete();
-                                vote(false, args[2], member, role, message.author);
+                                if (currentVote.indexOf(member.id) === -1)
+                                {
+                                    console.log(currentVote);
+                                    currentVote.push(member.id);
+                                    console.log(currentVote);
+                                    vote(false, args[2], member, role, message.author.username);
+                                }
+                                else
+                                {
+                                    const channel = client.channels.cache.find(channel => channel.name === "decvotes");
+                                    channel.send("Голосование за " + args[2] + " уже идет!");
+                                }
                             }
                         }
                     }
