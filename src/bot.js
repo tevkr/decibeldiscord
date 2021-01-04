@@ -57,7 +57,7 @@ async function vote(addRole, user, member, role)
         const filter = (reaction, user) => {
             return ['👍', '👎'].includes(reaction.emoji.name);
             };
-        const collected = await voteMessage.awaitReactions(filter, { time:86400000 }).catch(console.error);
+        const collected = await voteMessage.awaitReactions(filter, { time:5000 }).catch(console.error); //86400000
         console.log(collected);
         reactionNames = collected.map(s => reactionNames = s._emoji.name);
         reactionCount = collected.map(s => reactionCount = s.count);
