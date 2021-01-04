@@ -112,13 +112,14 @@ client.on('message', async message => {
         {
             if (message.member.roles.cache.find(r => r.name === "Децибел") || message.author.id === '379293173039759360')
             {
-                if (args.length === 0) return message.reply('выберите одну из опций [add, del]');
+                const channel = client.channels.cache.find(channel => channel.name === "decvotes");
+                if (args.length === 0) return channel.send("<@!" + message.author.id + "> выберите одну из опций [add, del]");
                 let option = args[0];
                 if (option === 'add' || option === 'del')
                 {
-                    if (args.length === 1) return message.reply('выберите одну из ролей [uvajaemiy]');
+                    if (args.length === 1) return channel.send("<@!" + message.author.id + "> выберите одну из ролей [uvajaemiy]");
                     let role = message.member.roles.cache.find(r => r.name === "Уважаемый");
-                    if (args.length === 2) return message.reply('укажите пользователя [@...]');
+                    if (args.length === 2) return channel.send("<@!" + message.author.id + "> укажите пользователя [@...]");
                     var user = message.mentions.members.first();
                     if (user)
                     {
@@ -130,7 +131,7 @@ client.on('message', async message => {
                             {
                                 if (member.roles.cache.find(r => r.name === "Уважаемый"))
                                 {
-                                    return message.reply('у указанного пользователя уже есть роль Уважаемый');
+                                    return channel.send("<@!" + message.author.id + "> у указанного пользователя уже есть роль Уважаемый");
                                 }
                                 message.delete();
                                 if (currentVote.indexOf(member.id) === -1)
@@ -140,7 +141,6 @@ client.on('message', async message => {
                                 }
                                 else
                                 {
-                                    const channel = client.channels.cache.find(channel => channel.name === "decvotes");
                                     channel.send("Голосование за " + args[2] + " уже идет!");
                                 }
                             }
@@ -148,7 +148,7 @@ client.on('message', async message => {
                             {
                                 if (!member.roles.cache.find(r => r.name === "Уважаемый"))
                                 {
-                                    return message.reply('у указанного пользователя и так нет роли Уважаемый');
+                                    return channel.send("<@!" + message.author.id + "> у указанного пользователя уже есть роль Уважаемый");
                                 }
                                 message.delete();
                                 if (currentVote.indexOf(member.id) === -1)
@@ -160,7 +160,6 @@ client.on('message', async message => {
                                 }
                                 else
                                 {
-                                    const channel = client.channels.cache.find(channel => channel.name === "decvotes");
                                     channel.send("Голосование за " + args[2] + " уже идет!");
                                 }
                             }
@@ -168,17 +167,17 @@ client.on('message', async message => {
                     }
                     else
                     {
-                        return message.reply('указанный пользователь не найден');
+                        return channel.send("<@!" + message.author.id + "> указанный пользователь не найден");
                     }
                 }
                 else
                 {
-                    return message.reply('вы выбрали несуществующую опцию! Используйте add или del');
+                    return channel.send("<@!" + message.author.id + "> вы выбрали несуществующую опцию! Используйте add или del");
                 }
             }
             else
             {
-                return message.reply('у вас нет прав для выполнения данной команды!');
+                return channel.send("<@!" + message.author.id + "> у вас нет прав для выполнения данной команды!");
             }
         }
     }
