@@ -15,7 +15,7 @@ async function vote(addRole, user, member, role)
         const filter = (reaction, user) => {
             return ['👍', '👎'].includes(reaction.emoji.name);
             };
-        const collected = await voteMessage.awaitReactions(filter, { time:5000 }).catch(console.error);
+        const collected = await voteMessage.awaitReactions(filter, { time:86400000 }).catch(console.error);
         console.log(collected);
         reactionNames = collected.map(s => reactionNames = s._emoji.name);
         reactionCount = collected.map(s => reactionCount = s.count);
@@ -57,7 +57,7 @@ async function vote(addRole, user, member, role)
         const filter = (reaction, user) => {
             return ['👍', '👎'].includes(reaction.emoji.name);
             };
-        const collected = await voteMessage.awaitReactions(filter, { time:5000 }).catch(console.error); //86400000
+        const collected = await voteMessage.awaitReactions(filter, { time:86400000 }).catch(console.error);
         console.log(collected);
         reactionNames = collected.map(s => reactionNames = s._emoji.name);
         reactionCount = collected.map(s => reactionCount = s.count);
@@ -130,6 +130,7 @@ client.on('message', async message => {
                                 {
                                     return message.reply('у указанного пользователя уже есть роль Уважаемый');
                                 }
+                                message.delete();
                                 vote(true, args[2], member, role);
                             }
                             else
@@ -138,6 +139,7 @@ client.on('message', async message => {
                                 {
                                     return message.reply('у указанного пользователя и так нет роли Уважаемый');
                                 }
+                                message.delete();
                                 vote(false, args[2], member, role);
                             }
                         }
