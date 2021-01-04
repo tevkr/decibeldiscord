@@ -113,13 +113,25 @@ client.on('message', async message => {
             if (message.member.roles.cache.find(r => r.name === "Децибел") || message.author.id === '379293173039759360')
             {
                 const channel = client.channels.cache.find(channel => channel.name === "decvotes");
-                if (args.length === 0) return channel.send("<@!" + message.author.id + "> выберите одну из опций [add, del]");
+                if (args.length === 0)
+                {
+                    message.delete();
+                    return channel.send("<@!" + message.author.id + "> выберите одну из опций [add, del]");
+                }
                 let option = args[0];
                 if (option === 'add' || option === 'del')
                 {
-                    if (args.length === 1) return channel.send("<@!" + message.author.id + "> выберите одну из ролей [uvajaemiy]");
+                    if (args.length === 1)
+                    {
+                        message.delete();
+                        return channel.send("<@!" + message.author.id + "> выберите одну из ролей [uvajaemiy]");
+                    }
                     let role = message.member.roles.cache.find(r => r.name === "Уважаемый");
-                    if (args.length === 2) return channel.send("<@!" + message.author.id + "> укажите пользователя [@...]");
+                    if (args.length === 2)
+                    {
+                        message.delete();
+                        return channel.send("<@!" + message.author.id + "> укажите пользователя [@...]");
+                    } 
                     var user = message.mentions.members.first();
                     if (user)
                     {
@@ -167,16 +179,19 @@ client.on('message', async message => {
                     }
                     else
                     {
+                        message.delete();
                         return channel.send("<@!" + message.author.id + "> указанный пользователь не найден");
                     }
                 }
                 else
                 {
+                    message.delete();
                     return channel.send("<@!" + message.author.id + "> вы выбрали несуществующую опцию! Используйте add или del");
                 }
             }
             else
             {
+                message.delete();
                 return channel.send("<@!" + message.author.id + "> у вас нет прав для выполнения данной команды!");
             }
         }
