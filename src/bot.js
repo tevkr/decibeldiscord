@@ -10,13 +10,13 @@ async function vote(addRole, user, member, role, author)
     const channel = client.channels.cache.find(channel => channel.name === "decvotes");
     if (addRole)
     {
-        let voteMessage = await channel.send("Голосование за добавление " + user + " в Уважаемый [24 часа]. Автор: " + author);
+        let voteMessage = await channel.send("Голосование за добавление " + user + " в Уважаемый [1 час]. Автор: " + author);
         await voteMessage.react(emojis[0]);
         await voteMessage.react(emojis[1]);
         const filter = (reaction, user) => {
             return ['👍', '👎'].includes(reaction.emoji.name);
             };
-        const collected = await voteMessage.awaitReactions(filter, { time:86400000 }).catch(console.error); //86400000
+        const collected = await voteMessage.awaitReactions(filter, { time:3600000 }).catch(console.error); //86400000
         console.log(collected);
         reactionNames = collected.map(s => reactionNames = s._emoji.name);
         reactionCount = collected.map(s => reactionCount = s.count);
@@ -52,13 +52,13 @@ async function vote(addRole, user, member, role, author)
     }
     else
     {
-        let voteMessage = await channel.send("Голосование за удаление " + user + " из Уважаемый [24 часа]. Автор: " + author);
+        let voteMessage = await channel.send("Голосование за удаление " + user + " из Уважаемый [1 час]. Автор: " + author);
         await voteMessage.react(emojis[0]);
         await voteMessage.react(emojis[1]);
         const filter = (reaction, user) => {
             return ['👍', '👎'].includes(reaction.emoji.name);
             };
-        const collected = await voteMessage.awaitReactions(filter, { time:86400000 }).catch(console.error);
+        const collected = await voteMessage.awaitReactions(filter, { time:3600000 }).catch(console.error);
         console.log(collected);
         reactionNames = collected.map(s => reactionNames = s._emoji.name);
         reactionCount = collected.map(s => reactionCount = s.count);
@@ -92,7 +92,7 @@ async function vote(addRole, user, member, role, author)
             }
         }
     }
-    currentVote.indexOf(member.id).remove();
+    currentVote.splice(currentVote.indexOf(member.id), 1);
     console.log(currentVote);
 }
 client.on('message', async message => {
